@@ -1,1 +1,4 @@
-.git/
+# Remove all dot files.
+.*
+# Remove Docker configuration, not used by build system.
+Dockerfile

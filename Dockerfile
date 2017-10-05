@@ -19,44 +19,47 @@ RUN apk add --no-cache \
       openssl \
       openssl-dev
 
+# Some settings to be used throughout dockerfile build times.
 ARG PROJECT_NAME
-ENV PROJECT_NAME=${PROJECT_NAME} \
-    build_dir="/tmp/build/$PROJECT_NAME" \
-    src_dir="/src/$PROJECT_NAME" \
-    install_dir="/opt/$PROJECT_NAME"
+ARG BUILD_DIR="/tmp/build/$PROJECT_NAME"
+ARG SRC_DIR="/src/$PROJECT_NAME"
+ARG INSTALL_DIR="/opt/$PROJECT_NAME"
 
-ADD ./cmake "$src_dir/cmake/"
-ADD ./extlib "$src_dir/extlib/"
-ADD CMakeLists.txt "$src_dir/"
-ADD ./src "$src_dir/src/"
+# Copy source files into the Docker image.
+COPY . "$SRC_DIR/"
 
 # The actual build command.
-RUN mkdir -p "$build_dir" \
- && cd "$build_dir" \
+RUN mkdir -p "$BUILD_DIR" \
+ && cd "$BUILD_DIR" \
  && cmake \
       -DCMAKE_BUILD_TYPE=release \
-      -DCMAKE_INSTALL_PREFIX:PATH="$install_dir" \
-      "$src_dir" \
- && cmake --build "$build_dir" \
- && cmake --build "$build_dir" --target install
+      -DCMAKE_INSTALL_PREFIX:PATH="$INSTALL_DIR" \
+      "$SRC_DIR" \
+ && cmake --build "$BUILD_DIR" \
+ && cmake --build "$BUILD_DIR" --target install
 
 # Build and source directories are not used at runtime.
-RUN rm -r "$build_dir" \
- && rm -r "$src_dir"
+RUN rm -r "$BUILD_DIR" \
+ && rm -r "$SRC_DIR"
 
 # Development packages are also not used at runtime.
 RUN apk del \
       boost-dev \
       openssl-dev
 
-ARG PORT
-ENV PORT=$PORT
-## # Expose is NOT supported by Heroku
-## EXPOSE $PORT
-
 # Use a non-root user during run time.
 RUN adduser -D example
 USER example
 
-WORKDIR "$install_dir"
+# Default runtime environment variables attached to the new user.
+# Project binary name.
+ARG PROJECT_NAME
+# Default port.
+ARG PORT
+# Add all variables using one single cache layer.
+ENV \
+  PROJECT_NAME=$PROJECT_NAME \
+  PORT=$PORT
+
+WORKDIR "$INSTALL_DIR"
 CMD bin/$PROJECT_NAME 0.0.0.0 $PORT . 1

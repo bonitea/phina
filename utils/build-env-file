@@ -1,0 +1,19 @@
+#!/bin/bash
+
+script_path="$(readlink -f "$0")"
+# Need the script folder that this script lies in in the path.
+# It contains subscripts to be called.
+script_dir="$(dirname $script_path)"
+# Assume project root is the parent of the util directory.
+project_dir="$(dirname $script_dir)"
+
+export PROJECT_NAME=phina
+export IMAGE_TAG="$PROJECT_NAME"
+
+# Load the environment variables for the docker container
+#   into the current scope.
+# This, in particular, exports the `$PORT` variable,
+#   required to publish the relevant port from the container for running.
+set -o allexport
+source "$project_dir/docker-env-file"
+set +o allexport
