@@ -7,7 +7,7 @@ script_dir="$(dirname $script_path)"
 # Assume project root is the parent of the util directory.
 project_dir="$(dirname $script_dir)"
 
-pushd "$project_dir"> /dev/null
+pushd "$project_dir" > /dev/null
 
 # Load environment variables for building the docker image.
 # This, in particular, exports the `$IMAGE_TAG`,
@@ -15,7 +15,7 @@ pushd "$project_dir"> /dev/null
 source "$script_dir/build-env-file"
 
 sudo docker build \
-  --tag "$IMAGE_TAG" \
+  --tag "$DOCKER_IMAGE_TAG" \
   .    # Note the dot at the end.
 
 popd > /dev/null

@@ -1,0 +1,19 @@
+sudo: required
+
+services:
+  - docker
+
+script:
+- ./utils/build
+
+after_success:
+  # Give these values to Travis CI. For example,
+  # ```sh
+  # travis env set DOCKER_USERNAME email@address
+  # travis env set DOCKER_PASSWORD $(heroku auth:token)
+  # travis env set DOCKER_REGISTRY registry.heroku.com
+  # ```
+  - docker login -u="$DOCKER_USERNAME" \
+                 -p="$DOCKER_PASSWORD" \
+                 "$DOCKER_REGISTRY"
+  - docker push "$DOCKER_IMAGE_TAG";

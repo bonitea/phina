@@ -7,12 +7,14 @@ script_dir="$(dirname $script_path)"
 # Assume project root is the parent of the util directory.
 project_dir="$(dirname $script_dir)"
 
-export IMAGE_TAG=phina
+## # Environment variables to be set in Travis CI.
+## # Not used in local builds.
+## export DOCKER_USERNAME email@address
+## export DOCKER_PASSWORD $(heroku auth:token)
+## export DOCKER_REGISTRY registry.heroku.com
 
-# Load the environment variables for the docker container
-#   into the current scope.
-# This, in particular, exports the `$PORT` variable,
-#   required to publish the relevant port from the container for running.
-set -o allexport
-source "$project_dir/docker-env-file"
-set +o allexport
+## # Travis CI can provide a custom image tag.
+## # The following does not overwrite the given image tag.
+: ${DOCKER_IMAGE_TAG=phina}
+export DOCKER_IMAGE_TAG
+
