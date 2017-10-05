@@ -14,12 +14,7 @@ pushd "$project_dir"> /dev/null
 #   required to name the new Docker image.
 source "$script_dir/build-env-file"
 
-set -o allexport
-source "$script_dir/build-env-file"
-set +o allexport
-
 sudo docker build \
-  --build-arg PROJECT_NAME="$PROJECT_NAME" \
   --tag "$IMAGE_TAG" \
   .    # Note the dot at the end.
 

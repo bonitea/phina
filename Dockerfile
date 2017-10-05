@@ -20,7 +20,7 @@ RUN apk add --no-cache \
       openssl-dev
 
 # Some settings to be used throughout dockerfile build times.
-ARG PROJECT_NAME
+ARG PROJECT_NAME=phina
 ARG BUILD_DIR="/tmp/build/$PROJECT_NAME"
 ARG SRC_DIR="/src/$PROJECT_NAME"
 ARG INSTALL_DIR="/opt/$PROJECT_NAME"
@@ -52,14 +52,14 @@ RUN adduser -D example
 USER example
 
 # Default runtime environment variables attached to the new user.
-# Project binary name.
-ARG PROJECT_NAME
+## # Binary name - use the project name added above.
+ARG BINARY_NAME=$PROJECT_NAME
 # Default port.
 ARG PORT
 # Add all variables using one single cache layer.
 ENV \
-  PROJECT_NAME=$PROJECT_NAME \
+  BINARY_NAME=$BINARY_NAME \
   PORT=$PORT
 
 WORKDIR "$INSTALL_DIR"
-CMD bin/$PROJECT_NAME 0.0.0.0 $PORT . 1
+CMD bin/$BINARY_NAME 0.0.0.0 $PORT . 1

@@ -7,8 +7,7 @@ script_dir="$(dirname $script_path)"
 # Assume project root is the parent of the util directory.
 project_dir="$(dirname $script_dir)"
 
-export PROJECT_NAME=phina
-export IMAGE_TAG="$PROJECT_NAME"
+export IMAGE_TAG=phina
 
 # Load the environment variables for the docker container
 #   into the current scope.
