@@ -1,0 +1,19 @@
+#!/bin/bash
+
+script_path="$(readlink -f "$0")"
+# Need the script folder that this script lies in in the path.
+# It contains subscripts to be called.
+script_dir="$(dirname $script_path)"
+# Assume project root is the parent of the util directory.
+project_dir="$(dirname $script_dir)"
+
+pushd "$project_dir" > /dev/null
+
+source "$script_dir/settings"
+sudo docker run \
+  --interactive \
+  --rm \
+  --tty  \
+  "$image_tag"
+
+popd > /dev/null
