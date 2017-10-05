@@ -13,6 +13,7 @@ source "$script_dir/settings"
 sudo docker build \
   --tag "$image_tag" \
   --build-arg PROJECT_NAME="$project_name" \
+  --build-arg PORT="$port" \
   .    # Note the dot at the end.
 
 popd > /dev/null

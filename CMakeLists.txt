@@ -14,6 +14,10 @@ add_executable(${PROJECT_NAME}
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 14)
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD_REQUIRED 14)
 
+# Uses Boost Beast.
+find_package(Beast REQUIRED)
+target_link_libraries(${PROJECT_NAME} PUBLIC Beast)
+
 install(TARGETS ${PROJECT_NAME}
   EXPORT ${PROJECT_NAME}
   DESTINATION bin

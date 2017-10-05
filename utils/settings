@@ -2,3 +2,4 @@
 
 export project_name=phina
 export image_tag="$project_name"
+export port=8000

@@ -10,10 +10,13 @@ project_dir="$(dirname $script_dir)"
 pushd "$project_dir" > /dev/null
 
 source "$script_dir/settings"
+xdg-open "http://localhost:$port/"
 sudo docker run \
   --interactive \
   --rm \
-  --tty  \
+  --tty \
+  --publish="$port:$port" \
+  -e PORT="$port" \
   "$image_tag"
 
 popd > /dev/null
