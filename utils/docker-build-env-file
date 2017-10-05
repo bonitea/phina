@@ -17,4 +17,3 @@ project_dir="$(dirname $script_dir)"
 ## # The following does not overwrite the given image tag.
 : ${DOCKER_IMAGE_TAG=phina}
 export DOCKER_IMAGE_TAG
-

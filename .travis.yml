@@ -4,7 +4,11 @@ services:
   - docker
 
 script:
-- ./utils/build
+  # Requires the image tag, in order to push it when it completes.
+  # ```sh
+  # travis env set DOCKER_IMAGE_TAG registry.heroku.com/project_name/web
+  # ```
+  - ./utils/docker-build
 
 after_success:
   # Give these values to Travis CI. For example,
@@ -12,8 +16,6 @@ after_success:
   # travis env set DOCKER_USERNAME email@address
   # travis env set DOCKER_PASSWORD $(heroku auth:token)
   # travis env set DOCKER_REGISTRY registry.heroku.com
+  # travis env set DOCKER_IMAGE_TAG registry.heroku.com/project_name/web
   # ```
-  - docker login -u="$DOCKER_USERNAME" \
-                 -p="$DOCKER_PASSWORD" \
-                 "$DOCKER_REGISTRY"
-  - docker push "$DOCKER_IMAGE_TAG";
+  - ./utils/travis-docker-push

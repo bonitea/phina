@@ -10,7 +10,7 @@ project_dir="$(dirname $script_dir)"
 # Load build environment variables from the docker image.
 # This, in particular, exports the `$IMAGE_TAG`,
 #   required to identify the Docker image to run.
-source "$script_dir/build-env-file"
+source "$script_dir/docker-build-env-file"
 
 # Load the environment variables for the docker container
 #   into the current scope.

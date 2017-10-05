@@ -1,0 +1,30 @@
+#!/bin/bash
+
+error_printf_exit() {
+  return_value=$?
+  if [[ 0 -eq $return_value ]]; then
+    return_value=1
+  fi
+  printf '%s: ' "$script_filename" 1>&2
+  printf "$@" 1>&2
+  exit $return_value
+}
+
+# The following variables are required
+#   to push the generated Docker image.
+[ -z "$DOCKER_USERNAME" ] \
+  && error_printf_exit '$DOCKER_USERNAME not found.\n'
+[ -z "$DOCKER_PASSWORD" ] \
+  && error_printf_exit '$DOCKER_PASSWORD not found.\n'
+[ -z "$DOCKER_REGISTRY" ] \
+  && error_printf_exit '$DOCKER_REGISTRY not found.\n'
+[ -z "$DOCKER_IMAGE_TAG" ] \
+  && error_printf_exit '$DOCKER_IMAGE_TAG not found.\n'
+
+sudo docker login --username="$DOCKER_USERNAME" \
+             --password="$DOCKER_PASSWORD" \
+             "$DOCKER_REGISTRY" \
+  || error_printf_exit 'Unable to log into remote Docker repository.\n'
+
+sudo docker push "$DOCKER_IMAGE_TAG" \
+  || error_printf_exit 'Unable to push to remote Docker repository.\n'
